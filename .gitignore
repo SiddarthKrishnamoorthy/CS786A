@@ -1,5 +1,5 @@
-word2vec-api/
-*.pkl
-*.zip
-*.tab
+asgn3/word2vec-api/
+asgn3/*.pkl
+asgn3/*.zip
+asgn3/*.tab
 .ipynb_checkpoints/
