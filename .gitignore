@@ -1,0 +1,6 @@
+final_sub/
+word2vec-api/
+*.pkl
+*.zip
+*.tab
+.ipynb_checkpoints/
