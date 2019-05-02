@@ -49,6 +49,7 @@ while (time < ENCODING_TIME + TEST_TIME):
     for m in range(N_ITEMS):
         # finding association on strengths
         soa[m] = np.dot(encoding[m], np.append(world, m))
+        #soa[m] = np.exp(-1*beta_param*np.linalg.norm(encoding[m]-np.append(world, m)))
     #soa = soa/np.linalg.norm(soa)
 
     out[time-ENCODING_TIME] = drawFromADist(soa)

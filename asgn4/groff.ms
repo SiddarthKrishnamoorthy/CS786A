@@ -8,7 +8,7 @@ K. Siddarth
 .NH
 Question 1
 .PP
-In this question, we store the encoding as a combination of the world vector and state m. We retrieve by comparing the current context vector with the encoding vectors. The average number of elements correctly recalled is 7.78, which was computed by averaging the number of elements recalled over 100 evaluations. The average scheduling load was around 17.44.
+In this question, we store the encoding as a combination of the world vector and state m. We retrieve by comparing the current context vector with the encoding vectors. The average number of elements correctly recalled is 7.78, which was computed by averaging the number of elements recalled over 100 evaluations. The average scheduling load was around 17.44. We use dot product to compute strength of activation. Using an RBF kernel like activation metric provided a retrieval rate of 8.81
 .NH
 Question 2
 .PP
