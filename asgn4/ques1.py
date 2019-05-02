@@ -55,4 +55,4 @@ while (time < ENCODING_TIME + TEST_TIME):
     time += 1
 
 success = np.unique(out)
-print("Number of unique retrievals = {0}".format(success.shape))
+print("Number of unique retrievals = {0}".format(success.shape[0]))
