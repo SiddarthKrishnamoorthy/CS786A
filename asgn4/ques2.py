@@ -16,8 +16,14 @@ TEST_TIME = 20
 # assume that agents change nothing in the world.
 
 # setting scheduling load to last 10 time units increases load but improves the retrieval
-schedule = np.arange(10)
-schedule = schedule + 490
+#schedule = np.arange(10)
+#schedule = schedule + 490
+
+# setting minimum scheduling load
+schedule = [0, 99, 198, 297, 396, 495, 496, 497, 498, 499]
+#schedule = [0, 1, 2, 3, 4, 103, 202, 301, 400, 499]
+schedule = np.asarray(schedule)
+
 #schedule = np.sort(np.random.randint(0, ENCODING_TIME+1, size=N_ITEMS))
 schedule_load = ENCODING_TIME/np.median(np.diff(schedule, 1)) # variable important for parts 2,3 of assignment
 encoding = np.zeros((N_ITEMS, N_WORLD_FEATURES+1))
@@ -55,6 +61,7 @@ for time in range(ENCODING_TIME):
 out = np.zeros(TEST_TIME)
 while (time < ENCODING_TIME + TEST_TIME):
     # the state of the world is the retrieval cue
+    delta = sampleFromGMM()
     world_m = world_m + delta
     world = world_var*np.random.randn(world_m.shape[0]) + world_m
 

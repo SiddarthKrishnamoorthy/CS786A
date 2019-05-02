@@ -1,5 +1,6 @@
 import numpy as np
 from drawFromADist import drawFromADist
+from sklearn.mixture import GaussianMixture
 
 # the temporal context model assumes that the past becomes increasingly
 # dissimilar to the future, so that memories become harder to retrieve the
@@ -15,20 +16,37 @@ TEST_TIME = 20
 # Gaussians with time-varying means and fixed variance. For simplicity,
 # assume that agents change nothing in the world.
 
-# first fix the presentation schedule; I'm assuming its random
-schedule = np.sort(np.random.randint(0, ENCODING_TIME+1, size=N_ITEMS))
+# setting scheduling load to last 10 time units increases load but improves the retrieval
+#schedule = np.arange(10)
+#schedule = schedule + 490
+
+schedule = [0, 99, 198, 297, 396, 495, 496, 497, 498, 499]
+schedule = np.asarray(schedule)
+#schedule = np.sort(np.random.randint(0, ENCODING_TIME+1, size=N_ITEMS))
 schedule_load = ENCODING_TIME/np.median(np.diff(schedule, 1)) # variable important for parts 2,3 of assignment
 encoding = np.zeros((N_ITEMS, N_WORLD_FEATURES+1))
 
 world_m = np.asarray([1, 2, 1, 2, 3]) # can generate randomly for yourself
 world_var = 1
-delta = 0.05 # what does this parameter affect?
+#delta = 0.05 # what does this parameter affect?
 beta_param = 0.001 # what does this parameter affect?
 m = 0 # state of the world ?
 
+# Gaussian mixture model
+mu = [0, 1]
+sig = 1
+mix_prob = 0.5
+
+def sampleFromGMM():
+    s = np.random.binomial(1, mix_prob)
+    return np.random.normal(mu[s], sig)
+#s = np.random.binomial(1, mix_prob)
+
 # simulating encoding
 
+delta_store = np.zeros(N_ITEMS)
 for time in range(ENCODING_TIME):
+    delta = sampleFromGMM()
     world_m = world_m + delta
     world = world_var*np.random.randn(world_m.shape[0]) + world_m
     # any item I want to encode in memory, I encode in association with the
@@ -36,12 +54,20 @@ for time in range(ENCODING_TIME):
     if (m<N_ITEMS):
         if (time == schedule[m]):
             # encode into the encoding vector
+            delta_store[m] = delta
             encoding[m, :] = np.append(world, m)
             m += 1
+
+# Modelling the drift distribution params using EM
+gm = GaussianMixture(n_components=2, covariance_type='spherical')
+X = delta_store.reshape((delta_store.shape[0], 1))
+gmm = gm.fit(X)
 
 out = np.zeros(TEST_TIME)
 while (time < ENCODING_TIME + TEST_TIME):
     # the state of the world is the retrieval cue
+    delta = gmm.sample()
+    delta = delta[0][0]
     world_m = world_m + delta
     world = world_var*np.random.randn(world_m.shape[0]) + world_m
 
