@@ -3,3 +3,4 @@ asgn3/*.pkl
 asgn3/*.zip
 asgn3/*.tab
 .ipynb_checkpoints/
+asgn1/q-learning/*.npy

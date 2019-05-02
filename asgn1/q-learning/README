@@ -1,0 +1,2 @@
+The reward vs episode plot and performance vs episode plot both use N=5 and
+M=8, with alpha=0.1, lambda=0.5 and decaying epsilon.
