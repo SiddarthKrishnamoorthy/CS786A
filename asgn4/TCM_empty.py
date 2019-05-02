@@ -1,4 +1,5 @@
 import numpy as np
+from drawFromADist import drawFromADist
 
 # the temporal context model assumes that the past becomes increasingly
 # dissimilar to the future, so that memories become harder to retrieve the
@@ -23,24 +24,35 @@ world_m = np.asarray([1, 2, 1, 2, 3]) # can generate randomly for yourself
 world_var = 1
 delta = 0.05 # what does this parameter affect?
 beta_param = 0.001 # what does this parameter affect?
-m = 0
+m = 0 # state of the world ?
 
 # simulating encoding
 
 for time in range(ENCODING_TIME):
     world_m = world_m + delta
-    world = world_var*np.random.randn(world_m.shape) + world_m
+    world = world_var*np.random.randn(world_m.shape[0]) + world_m
     # any item I want to encode in memory, I encode in association with the
     # state of the world at that time.
     if (m<N_ITEMS):
         if (time == schedule[m]):
             # encode into the encoding vector
-            encoding[m, :] = 
+            encoding[m, :] = np.append(world, m)
             m += 1
 
+out = np.zeros(TEST_TIME)
 while (time < ENCODING_TIME + TEST_TIME):
     # the state of the world is the retrieval cue
+    world_m = world_m + delta
+    world = world_var*np.random.randn(world_m.shape[0]) + world_m
 
+    soa = np.zeros(N_ITEMS)
     for m in range(N_ITEMS):
         # finding association on strengths
-        soa(m) = 
+        soa[m] = np.dot(encoding[m], np.append(world, m))
+    #soa = soa/np.linalg.norm(soa)
+
+    out[time-ENCODING_TIME] = drawFromADist(soa)
+    time += 1
+
+success = np.unique(out)
+print("Number of unique retrievals = {0}".format(success.shape))
